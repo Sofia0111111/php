@@ -1,0 +1,28 @@
+<?php
+
+// 1. Обработка массива температур
+$highTemps = array(68, 70, 72, 58, 60, 79, 82, 73, 75, 77, 73, 58, 63, 79, 78, 
+                   68, 72, 73, 80, 79, 68, 72, 75, 77, 73, 78, 82, 85, 89, 83);
+
+// Вычисляем среднюю высокую температуру
+$average = array_sum($highTemps) / count($highTemps);
+
+// Находим пять самых теплых и пять самых холодных высоких температур
+rsort($highTemps); // Сортировка по убыванию
+$topFive = array_slice($highTemps, 0, 5);
+$bottomFive = array_slice($highTemps, -5);
+
+// Выводим результаты
+echo "Средняя высокая температура: " . round($average, 2) . "<br>";
+echo "Пять самых теплых температур: " . implode(", ", $topFive) . "<br>";
+echo "Пять самых низких температур: " . implode(", ", $bottomFive) . "<br>";
+
+// 2. Очистка формата телефона
+$phone = '+7 (900) 000-00-00';
+$cleanedPhone = preg_replace('/\\D/', '', $phone);
+echo "Очистленный номер телефона: " . $cleanedPhone . "<br>";
+
+// 3. Получение символов после последнего слэша в URL
+$url = 'http://www.wm-school.ru/7478639';
+$lastSegment = basename($url);
+echo "Часть URL после последнего слэша: " . $lastSegment;    ?>
