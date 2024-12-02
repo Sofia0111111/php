@@ -19,9 +19,12 @@ abstract class AbstractLogger implements LoggerInterface {
     }
 }
 
-// Конкретный класс логгера, который наследует от AbstractLogger
+// Конкретный класс логгера, наследующий AbstractLogger
 class DatabaseLogger extends AbstractLogger {
-    // Можно добавить дополнительные методы или свойства, если нужно
+    // Реализация метода log
+    public function log(string $message): void {
+        $this->writeToDatabase($message); // Вызов логики записи
+    }
 }
 
 // Пример использования
