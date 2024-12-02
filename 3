@@ -1,0 +1,34 @@
+<?php
+
+// Интерфейс логгера, обеспечивающий общий контракт для всех логгеров
+interface LoggerInterface {
+    public function log(string $message): void;
+}
+
+// Абстрактный класс, определяющий общую логику для всех логгеров
+abstract class AbstractLogger implements LoggerInterface {
+    // Метод для записи сообщения в лог
+    abstract protected function writeLog(string $message): void;
+
+    // Реализация метода из интерфейса
+    public function log(string $message): void {
+        // Здесь можно добавить общую логику, например, обработку ошибок
+        $this->writeLog($message); // Вызов абстрактного метода для записи
+    }
+}
+
+// Конкретная реализация логгера для записи в базу данных
+class DatabaseLogger extends AbstractLogger {
+    protected function writeLog(string $message): void {
+        // Здесь должна быть логика подключения к базе данных и записи сообщения
+        // Например:
+        // $dbConnection = new DatabaseConnection();
+        // $dbConnection->insertLog($message);
+        echo "Записываем в базу данных: $message\\n"; // Имитация записи
+    }
+}
+
+// Пример использования
+$logger = new DatabaseLogger();
+$logger->log("Это тестовое сообщение.");
+?>
