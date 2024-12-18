@@ -1,0 +1,54 @@
+<?php
+
+// Подключение к базе данных
+$host = 'localhost';
+$db = 'task_db';
+$user = 'root';
+$pass = 'rootet';
+$pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
+
+// Создание таблицы задач (если не существует)
+$pdo->exec("CREATE TABLE IF NOT EXISTS tasks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    completed TINYINT(1) DEFAULT 0
+)");
+
+// Функция для добавления задачи
+function addTask($title) {
+    global $pdo;
+    $stmt = $pdo->prepare("INSERT INTO tasks (title) VALUES (:title)");
+    $stmt->execute(['title' => $title]);
+}
+
+// Функция для получения задач с фильтрацией
+function getTasks($filter = 'all') {
+    global $pdo;
+    $query = "SELECT * FROM tasks";
+    if ($filter == 'completed') $query .= " WHERE completed = 1";
+    if ($filter == 'incomplete') $query .= " WHERE completed = 0";
+    return $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// Функция для удаления задачи
+function deleteTask($id) {
+    global $pdo;
+    $stmt = $pdo->prepare("DELETE FROM tasks WHERE id = :id");
+    $stmt->execute(['id' => $id]);
+}
+
+// Функция для обновления статуса задачи
+function toggleTaskCompletion($id) {
+    global $pdo;
+    $stmt = $pdo->prepare("UPDATE tasks SET completed = NOT completed WHERE id = :id");
+    $stmt->execute(['id' => $id]);
+}
+
+// Вывод задач
+while ($row = $result->fetch_assoc()) {
+    echo "<div>" . $row['title'] . " - " . ($row['completed'] ? "Выполнено" : "Не выполнено") . " <a href='?complete=" . $row['id'] . "'>Изменить</a> <a href='?delete=" . $row['id'] . "'>Удалить</a></div>";
+}
+
+// Закрытие соединения
+$pdo->close();
+?>
